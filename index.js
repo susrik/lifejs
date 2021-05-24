@@ -5,6 +5,9 @@ const DIMENSIONS = {
     rows: 70
 };
 
+const ALIVE_COLOR = 'blue'
+const DEAD_COLOR = 'white'
+
 initValueArray = () => {
     return Array(DIMENSIONS.columns).fill().map(() => Array(DIMENSIONS.rows).fill(false));
 }
@@ -27,24 +30,15 @@ document.getElementById('canvas').innerHTML
 var canvas = document.getElementById("life");
 var ctx = canvas.getContext("2d");
 
-const setPixel = (dataVector, offset, alive) => {
-    dataVector[offset] = alive ? 255 : 255;
-    dataVector[offset+1] = alive ? 0 : 255;
-    dataVector[offset+2] = alive ? 0 : 255;
-    dataVector[offset+3] = 255;
-};
-
 const drawCurrent = () => {
     const current = getCurrent();
     for(let x=0; x<DIMENSIONS.rows; x++) {
         for(let y=0; y<DIMENSIONS.columns; y++) {
-            const imgData = ctx.createImageData(DIMENSIONS.col_width, DIMENSIONS.row_height);
-            for(let i=0; i<imgData.data.length; i+=4) {
-                setPixel(imgData.data, i, current[x][y]);
-            }
+            ctx.fillStyle = current[x][y] ? ALIVE_COLOR : DEAD_COLOR;
             const canvas_x = x * DIMENSIONS.col_width;
             const canvas_y = y * DIMENSIONS.row_height;
-            ctx.putImageData(imgData, canvas_x, canvas_y);          
+            ctx.fillRect(canvas_x, canvas_y,
+                canvas_x + DIMENSIONS.col_width, canvas_y + DIMENSIONS.row_height);
         }
     }
 };
