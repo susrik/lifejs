@@ -108,11 +108,11 @@ const latch = () => {
 };
 
 
-async function cycle() {
+function cycle() {
     drawCurrent();
     updateNext();
     latch();
-    setTimeout(cycle, 20);
+    setTimeout(cycle, 0);  // as soon as possible
 }
 
 // compute next generation, without previous optimization
