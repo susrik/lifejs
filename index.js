@@ -1,8 +1,8 @@
 const DIMENSIONS = {
-    col_width: 5,
-    row_height: 5,
-    columns: 70,
-    rows: 70
+    col_width: 2,
+    row_height: 2,
+    columns: 500,
+    rows: 300
 };
 
 const ALIVE_COLOR = 'blue'
@@ -95,8 +95,8 @@ const computeNext = (x, y) => {
 
 const updateNext = () => {
     const next = getNext();
-    for(let x=0; x<DIMENSIONS.rows; x++) {
-        for(let y=0; y<DIMENSIONS.columns; y++) {
+    for(let x=0; x<DIMENSIONS.columns; x++) {
+        for(let y=0; y<DIMENSIONS.rows; y++) {
             next[x][y] = computeNext(x, y);
         }
     }
@@ -112,7 +112,7 @@ async function cycle() {
     drawCurrent();
     updateNext();
     latch();
-    setTimeout(cycle, 100);
+    setTimeout(cycle, 20);
 }
 
 // compute next generation, without previous optimization
