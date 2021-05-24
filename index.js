@@ -71,11 +71,7 @@ const computeNext = (x, y) => {
             current[_norm_x(x+1)][_norm_y(y+1)], //lr
         ];
 
-        let total = 0;
-        for(let i=0; i<_neighbor_states.length; i++) {
-            if(_neighbor_states[i]) { total++; }
-        }
-        return total;
+        return _neighbor_states.map((x) => x ? 1 : 0).reduce((x,y) => x+y);
     };
 
     const num_neighbors = _count_neighbors();
