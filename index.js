@@ -17,7 +17,7 @@ let generation = 0;
 
 const getCurrent = () => generations[generation % generations.length];
 const getNext = () => generations[(generation + 1) % generations.length];
-
+const getPrevious = () => generations[(generation + generations.length - 1) % generations.length];
 
 for(let x=0; x< DIMENSIONS.columns; x++) {
     for(let y=0; y<DIMENSIONS.rows; y++) {
@@ -25,20 +25,29 @@ for(let x=0; x< DIMENSIONS.columns; x++) {
     }
 }
 
+// getCurrent()[0][0] = true
+// getCurrent()[0][1] = true
+// getCurrent()[1][0] = true
+// getCurrent()[1][1] = true
+// getCurrent()[2][2] = true
+
 document.getElementById('canvas').innerHTML
     = `<canvas id="life" width="${DIMENSIONS.columns * DIMENSIONS.col_width}" height="${DIMENSIONS.rows * DIMENSIONS.row_height}" />`;
 var canvas = document.getElementById("life");
 var ctx = canvas.getContext("2d");
 
-const drawCurrent = () => {
+const drawCurrent = (ignore_previous = false) => {
     const current = getCurrent();
-    for(let x=0; x<DIMENSIONS.rows; x++) {
-        for(let y=0; y<DIMENSIONS.columns; y++) {
+    const previous = getNext();
+    for(let x=0; x<DIMENSIONS.columns; x++) {
+        for(let y=0; y<DIMENSIONS.rows; y++) {
+            if (!ignore_previous && current[x][y] == previous[x][y]) {
+                continue;
+            }
             ctx.fillStyle = current[x][y] ? ALIVE_COLOR : DEAD_COLOR;
             const canvas_x = x * DIMENSIONS.col_width;
             const canvas_y = y * DIMENSIONS.row_height;
-            ctx.fillRect(canvas_x, canvas_y,
-                canvas_x + DIMENSIONS.col_width, canvas_y + DIMENSIONS.row_height);
+            ctx.fillRect(canvas_x, canvas_y, DIMENSIONS.col_width, DIMENSIONS.row_height);
         }
     }
 };
@@ -105,5 +114,10 @@ async function cycle() {
     latch();
     setTimeout(cycle, 100);
 }
+
+// compute next generation, without previous optimization
+drawCurrent(true);
+updateNext();
+latch();
 
 cycle();
